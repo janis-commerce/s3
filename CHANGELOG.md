@@ -10,4 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.0] - 2019-12-06
 ### Added
 - add `putObject` mehtod
+- add `deleteObject` mehtod
+- add `listObjects` mehtod
+- add `listBuckets` mehtod
+- add `createBucket` mehtod
+- add `deleteBucket` mehtod
 

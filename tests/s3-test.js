@@ -19,6 +19,27 @@ describe('S3', () => {
 		Key: 'objectkey'
 	};
 
+	context('getObject', () => {
+
+		it('should return a promise with the same params calling to getObject method', async () => {
+
+			sandbox.stub(s3Wrapper, 'getObject').returns({ promise: () => Promise.resolve(s3Params) });
+
+			const getObjectInstance = await S3.getObject(s3Params);
+
+			assert.deepStrictEqual(getObjectInstance, s3Params);
+		});
+
+		it('should call with the same params to getObject method', async () => {
+
+			sandbox.stub(s3Wrapper, 'getObject').returns({ promise: () => Promise.resolve(s3Params) });
+
+			await S3.getObject(s3Params);
+
+			sandbox.assert.calledWithExactly(s3Wrapper.getObject, s3Params);
+		});
+	});
+
 	context('putObject', () => {
 
 		it('should return a promise with the same params calling to putObject method', async () => {
@@ -37,6 +58,111 @@ describe('S3', () => {
 			await S3.putObject(s3Params);
 
 			sandbox.assert.calledWithExactly(s3Wrapper.putObject, s3Params);
+		});
+	});
+
+	context('deleteObject', () => {
+
+		it('should return a promise with the same params calling to deleteObject method', async () => {
+
+			sandbox.stub(s3Wrapper, 'deleteObject').returns({ promise: () => Promise.resolve(s3Params) });
+
+			const deleteObjectInstance = await S3.deleteObject(s3Params);
+
+			assert.deepStrictEqual(deleteObjectInstance, s3Params);
+		});
+
+		it('should call with the same params to deleteObject method', async () => {
+
+			sandbox.stub(s3Wrapper, 'deleteObject').returns({ promise: () => Promise.resolve(s3Params) });
+
+			await S3.deleteObject(s3Params);
+
+			sandbox.assert.calledWithExactly(s3Wrapper.deleteObject, s3Params);
+		});
+	});
+
+	context('listObjects', () => {
+
+		it('should return a promise with the same params calling to listObjects method', async () => {
+
+			sandbox.stub(s3Wrapper, 'listObjects').returns({ promise: () => Promise.resolve(s3Params) });
+
+			const listObjectsInstance = await S3.listObjects(s3Params);
+
+			assert.deepStrictEqual(listObjectsInstance, s3Params);
+		});
+
+		it('should call with the same params to listObjects method', async () => {
+
+			sandbox.stub(s3Wrapper, 'listObjects').returns({ promise: () => Promise.resolve(s3Params) });
+
+			await S3.listObjects(s3Params);
+
+			sandbox.assert.calledWithExactly(s3Wrapper.listObjects, s3Params);
+		});
+	});
+
+	context('listBuckets', () => {
+
+		it('should return a promise with the same params calling to listBuckets method', async () => {
+
+			sandbox.stub(s3Wrapper, 'listBuckets').returns({ promise: () => Promise.resolve(s3Params) });
+
+			const listBucketsInstance = await S3.listBuckets(s3Params);
+
+			assert.deepStrictEqual(listBucketsInstance, s3Params);
+		});
+
+		it('should call with the same params to listBuckets method', async () => {
+
+			sandbox.stub(s3Wrapper, 'listBuckets').returns({ promise: () => Promise.resolve(s3Params) });
+
+			await S3.listBuckets(s3Params);
+
+			sandbox.assert.calledWithExactly(s3Wrapper.listBuckets, s3Params);
+		});
+	});
+
+	context('createBucket', () => {
+
+		it('should return a promise with the same params calling to createBucket method', async () => {
+
+			sandbox.stub(s3Wrapper, 'createBucket').returns({ promise: () => Promise.resolve(s3Params) });
+
+			const createBucketInstance = await S3.createBucket(s3Params);
+
+			assert.deepStrictEqual(createBucketInstance, s3Params);
+		});
+
+		it('should call with the same params to createBucket method', async () => {
+
+			sandbox.stub(s3Wrapper, 'createBucket').returns({ promise: () => Promise.resolve(s3Params) });
+
+			await S3.createBucket(s3Params);
+
+			sandbox.assert.calledWithExactly(s3Wrapper.createBucket, s3Params);
+		});
+	});
+
+	context('deleteBucket', () => {
+
+		it('should return a promise with the same params calling to deleteBucket method', async () => {
+
+			sandbox.stub(s3Wrapper, 'deleteBucket').returns({ promise: () => Promise.resolve(s3Params) });
+
+			const deleteBucketInstance = await S3.deleteBucket(s3Params);
+
+			assert.deepStrictEqual(deleteBucketInstance, s3Params);
+		});
+
+		it('should call with the same params to deleteBucket method', async () => {
+
+			sandbox.stub(s3Wrapper, 'deleteBucket').returns({ promise: () => Promise.resolve(s3Params) });
+
+			await S3.deleteBucket(s3Params);
+
+			sandbox.assert.calledWithExactly(s3Wrapper.deleteBucket, s3Params);
 		});
 	});
 });
