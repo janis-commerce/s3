@@ -10,13 +10,23 @@ A package to handle the S3 requests
 npm install @janiscommerce/s3
 ```
 
-## API
-
-
 ## Usage
 ```js
 const S3 = require('@janiscommerce/s3');
 
-```
+const putObjectParams = {
+	Body: 'body',
+	Bucket: 'bucketName',
+	Key: `objectKey`
+};
 
-## Examples
+const s3Response = S3.putObject();
+
+return s3Response.then(respponse => {
+	// do some stuf with the success
+}).cath(err => {
+	// do some stuf with the error
+
+})
+
+```
