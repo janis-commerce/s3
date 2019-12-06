@@ -20,7 +20,7 @@ const putObjectParams = {
 	Key: `objectKey`
 };
 
-const s3Response = S3.putObject();
+const s3Response = S3.putObject(putObjectParams);
 
 return s3Response.then(respponse => {
 	// do some stuf with the success
