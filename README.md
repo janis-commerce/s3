@@ -9,6 +9,16 @@ A package to handle the S3 requests
 ```sh
 npm install @janiscommerce/s3
 ```
+## Methods
+The methods that can be used are:
+
+* `getObject`
+* `putObject`
+* `deleteObject`
+* `listObjects`
+* `listBuckets`
+* `createBucket`
+* `deleteBucket`
 
 ## Usage
 ```js
@@ -26,7 +36,6 @@ return s3Response.then(respponse => {
 	// do some stuf with the success
 }).cath(err => {
 	// do some stuf with the error
-
 })
 
 ```
