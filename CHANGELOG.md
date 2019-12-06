@@ -7,5 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.0] - 2019-12-06
+### Added
+- Added `getSignedUrl` method
+
 ## [1.0.0] - 2019-12-06
+### Added
 - Initial version of the package

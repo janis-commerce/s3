@@ -23,6 +23,7 @@ The possible methods are:
 * `listBuckets`
 * `createBucket`
 * `deleteBucket`
+* `getSignedUrl` (alias of `getSignedUrlPromise`)
 
 All of them receive the same params and are promisified.
 

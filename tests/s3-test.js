@@ -63,7 +63,7 @@ describe('S3', () => {
 			assert.deepStrictEqual(putObjectInstance, s3Params);
 		});
 
-		it('Should rejects the promise calling to getObject method', async () => {
+		it('Should rejects the promise calling to putObject method', async () => {
 
 			const message = 'random message error';
 
@@ -96,7 +96,7 @@ describe('S3', () => {
 			assert.deepStrictEqual(deleteObjectInstance, s3Params);
 		});
 
-		it('Should rejects the promise calling to getObject method', async () => {
+		it('Should rejects the promise calling to deleteObject method', async () => {
 
 			const message = 'random message error';
 
@@ -129,7 +129,7 @@ describe('S3', () => {
 			assert.deepStrictEqual(listObjectsInstance, s3Params);
 		});
 
-		it('Should rejects the promise calling to getObject method', async () => {
+		it('Should rejects the promise calling to listObjects method', async () => {
 
 			const message = 'random message error';
 
@@ -162,7 +162,7 @@ describe('S3', () => {
 			assert.deepStrictEqual(listBucketsInstance, s3Params);
 		});
 
-		it('Should rejects the promise calling to getObject method', async () => {
+		it('Should rejects the promise calling to listBuckets method', async () => {
 
 			const message = 'random message error';
 
@@ -195,7 +195,7 @@ describe('S3', () => {
 			assert.deepStrictEqual(createBucketInstance, s3Params);
 		});
 
-		it('Should rejects the promise calling to getObject method', async () => {
+		it('Should rejects the promise calling to createBucket method', async () => {
 
 			const message = 'random message error';
 
@@ -228,7 +228,7 @@ describe('S3', () => {
 			assert.deepStrictEqual(deleteBucketInstance, s3Params);
 		});
 
-		it('Should rejects the promise calling to getObject method', async () => {
+		it('Should rejects the promise calling to deleteBucket method', async () => {
 
 			const message = 'random message error';
 
@@ -247,6 +247,41 @@ describe('S3', () => {
 			await S3.deleteBucket(s3Params);
 
 			sinon.assert.calledWithExactly(s3Wrapper.deleteBucket, s3Params);
+		});
+	});
+
+	context('getSignedUrl', () => {
+
+		const url = 'https://bucket-name.s3.us-east-1.amazonaws.com/path/to/file.txt';
+
+		it('Should return a the same response when calling to getSignedUrl method', async () => {
+
+			sinon.stub(s3Wrapper, 'getSignedUrlPromise').returns(Promise.resolve(url));
+
+			const presignedUrl = await S3.getSignedUrl(s3Params);
+
+			assert.deepStrictEqual(presignedUrl, url);
+		});
+
+		it('Should rejects the promise calling to getSignedUrl method', async () => {
+
+			const message = 'random message error';
+
+			sinon.stub(s3Wrapper, 'getSignedUrlPromise').returns(Promise.reject(new Error(message)));
+
+			assert.rejects(S3.getSignedUrl(s3Params), {
+				name: 'Error',
+				message
+			});
+		});
+
+		it('Should call with the same params to getSignedUrlPromise method', async () => {
+
+			sinon.stub(s3Wrapper, 'getSignedUrlPromise').returns(Promise.resolve(url));
+
+			await S3.getSignedUrl(s3Params);
+
+			sinon.assert.calledWithExactly(s3Wrapper.getSignedUrlPromise, s3Params);
 		});
 	});
 });
