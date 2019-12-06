@@ -9,8 +9,10 @@ A package to handle the S3 requests
 ```sh
 npm install @janiscommerce/s3
 ```
-## Methods
-The methods that can be used are:
+## Description
+This is a package that wrapped the AWS SDK for the management S3 request, it will make easier the using of it. For more information read the AWS S3 SDK [AWS S3 SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)
+
+The possible methods are:
 
 * `getObject`
 * `putObject`
