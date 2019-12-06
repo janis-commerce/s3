@@ -21,7 +21,7 @@ describe('S3', () => {
 
 	context('getObject', () => {
 
-		it('Should return a promise with the same params calling to getObject method', async () => {
+		it('Should return the same response when calling to getObject method', async () => {
 
 			sinon.stub(s3Wrapper, 'getObject').returns({ promise: () => Promise.resolve(s3Params) });
 
@@ -54,7 +54,7 @@ describe('S3', () => {
 
 	context('putObject', () => {
 
-		it('Should return a promise with the same params calling to putObject method', async () => {
+		it('Should return a the same response when calling to putObject method', async () => {
 
 			sinon.stub(s3Wrapper, 'putObject').returns({ promise: () => Promise.resolve(s3Params) });
 
@@ -87,7 +87,7 @@ describe('S3', () => {
 
 	context('deleteObject', () => {
 
-		it('Should return a promise with the same params calling to deleteObject method', async () => {
+		it('Should return a the same response when calling to deleteObject method', async () => {
 
 			sinon.stub(s3Wrapper, 'deleteObject').returns({ promise: () => Promise.resolve(s3Params) });
 
@@ -120,7 +120,7 @@ describe('S3', () => {
 
 	context('listObjects', () => {
 
-		it('Should return a promise with the same params calling to listObjects method', async () => {
+		it('Should return a the same response when calling to listObjects method', async () => {
 
 			sinon.stub(s3Wrapper, 'listObjects').returns({ promise: () => Promise.resolve(s3Params) });
 
@@ -153,7 +153,7 @@ describe('S3', () => {
 
 	context('listBuckets', () => {
 
-		it('Should return a promise with the same params calling to listBuckets method', async () => {
+		it('Should return a the same response when calling to listBuckets method', async () => {
 
 			sinon.stub(s3Wrapper, 'listBuckets').returns({ promise: () => Promise.resolve(s3Params) });
 
@@ -186,7 +186,7 @@ describe('S3', () => {
 
 	context('createBucket', () => {
 
-		it('Should return a promise with the same params calling to createBucket method', async () => {
+		it('Should return a the same response when calling to createBucket method', async () => {
 
 			sinon.stub(s3Wrapper, 'createBucket').returns({ promise: () => Promise.resolve(s3Params) });
 
@@ -219,7 +219,7 @@ describe('S3', () => {
 
 	context('deleteBucket', () => {
 
-		it('Should return a promise with the same params calling to deleteBucket method', async () => {
+		it('Should return a the same response when calling to deleteBucket method', async () => {
 
 			sinon.stub(s3Wrapper, 'deleteBucket').returns({ promise: () => Promise.resolve(s3Params) });
 
