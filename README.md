@@ -32,7 +32,7 @@ const putObjectParams = {
 
 const s3Response = S3.putObject(putObjectParams);
 
-return s3Response.then(respponse => {
+return s3Response.then(response => {
 	// do some stuf with the success
 }).cath(err => {
 	// do some stuf with the error
