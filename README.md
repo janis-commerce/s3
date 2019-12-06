@@ -10,7 +10,9 @@ A package to handle the S3 requests
 npm install @janiscommerce/s3
 ```
 ## Description
-This is a package that wrapped the AWS SDK for the management S3 request, it will make easier the using of it. For more information read the AWS S3 SDK [AWS S3 SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)
+This is a wrapper for the AWS SDK for the management S3 request, that makes easier the use of it.
+
+For more information read the [AWS S3 SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)
 
 The possible methods are:
 
@@ -22,22 +24,20 @@ The possible methods are:
 * `createBucket`
 * `deleteBucket`
 
+All of them receive the same params and are promisified.
+
 ## Usage
 ```js
 const S3 = require('@janiscommerce/s3');
 
-const putObjectParams = {
-	Body: 'body',
-	Bucket: 'bucketName',
-	Key: `objectKey`
-};
-
-const s3Response = S3.putObject(putObjectParams);
-
-return s3Response.then(response => {
-	// do some stuf with the success
-}).cath(err => {
-	// do some stuf with the error
-})
-
+try {
+	const s3Response = await S3.putObject({
+		Body: 'File content',
+		Bucket: 'bucket-ame',
+		Key: `path/to/file.txt`
+	});
+	console.log(s3Response);
+} catch(err) {
+	handleError(err);
+}
 ```
