@@ -18,12 +18,14 @@ The possible methods are:
 
 * `getObject`
 * `putObject`
+* `headObject`
 * `deleteObject`
 * `listObjects`
 * `listBuckets`
 * `createBucket`
 * `deleteBucket`
 * `getSignedUrl` (alias of `getSignedUrlPromise`)
+* `createPresignedPost`
 
 All of them receive the same params and are promisified.
 
