@@ -284,4 +284,97 @@ describe('S3', () => {
 			sinon.assert.calledWithExactly(s3Wrapper.getSignedUrlPromise, s3Params);
 		});
 	});
+
+	context('headObject', () => {
+
+		const response = {
+			AcceptRanges: 'bytes',
+			LastModified: '2019-11-27T18:50:40.000Z',
+			ContentLength: 56782,
+			ETag: '"e77f5136cc15419e4c81beba285d4bde"',
+			ContentType: 'image/jpeg',
+			Metadata: {}
+		};
+
+
+		it('Should return a the same response when calling to headObject method', async () => {
+
+			sinon.stub(s3Wrapper, 'headObject').returns({ promise: () => Promise.resolve(response) });
+
+			const headObjectResponse = await S3.headObject(s3Params);
+
+			assert.deepStrictEqual(headObjectResponse, response);
+		});
+
+		it('Should rejects the promise calling to headObject method', async () => {
+
+			const message = 'random message error';
+
+			sinon.stub(s3Wrapper, 'headObject').returns({ promise: () => Promise.reject(new Error(message)) });
+
+			assert.rejects(S3.headObject(s3Params), {
+				name: 'Error',
+				message
+			});
+		});
+
+		it('Should call with the same params to headObject method', async () => {
+
+			sinon.stub(s3Wrapper, 'headObject').returns({ promise: () => Promise.resolve(response) });
+
+			await S3.headObject(s3Params);
+
+			sinon.assert.calledWithExactly(s3Wrapper.headObject, s3Params);
+		});
+	});
+
+	context('createPresignedPost', () => {
+
+		const response = {
+			url: 'URL',
+			fields: {}
+		};
+
+		it('Should return a the same response when calling to createPresignedPost method', async () => {
+
+			sinon.stub(s3Wrapper, 'createPresignedPost');
+
+			s3Wrapper.createPresignedPost.callsFake((params, callback) => {
+				callback(null, response);
+			});
+
+			const createPresignedPostResponse = await S3.createPresignedPost(s3Params);
+
+			assert.deepStrictEqual(createPresignedPostResponse, response);
+		});
+
+		it('Should rejects the promise calling to createPresignedPost method', async () => {
+
+			sinon.stub(s3Wrapper, 'createPresignedPost');
+
+			const message = 'random message error';
+
+			s3Wrapper.createPresignedPost.callsFake((params, callback) => {
+				callback(new Error(message), null);
+			});
+
+			assert.rejects(S3.createPresignedPost(s3Params), {
+				name: 'Error',
+				message
+			});
+		});
+
+		it('Should call with the same params to createPresignedPost method', async () => {
+
+			sinon.stub(s3Wrapper, 'createPresignedPost');
+
+			s3Wrapper.createPresignedPost.callsFake((params, callback) => {
+				callback(null, response);
+			});
+
+			await S3.createPresignedPost(s3Params);
+
+			assert.deepStrictEqual(s3Wrapper.createPresignedPost.getCall(0).args[0], s3Params);
+		});
+	});
 });
