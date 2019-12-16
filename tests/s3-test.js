@@ -258,7 +258,7 @@ describe('S3', () => {
 
 			sinon.stub(s3Wrapper, 'getSignedUrlPromise').returns(Promise.resolve(url));
 
-			const presignedUrl = await S3.getSignedUrl(s3Params);
+			const presignedUrl = await S3.getSignedUrl('getObject', s3Params);
 
 			assert.deepStrictEqual(presignedUrl, url);
 		});
@@ -269,7 +269,7 @@ describe('S3', () => {
 
 			sinon.stub(s3Wrapper, 'getSignedUrlPromise').returns(Promise.reject(new Error(message)));
 
-			assert.rejects(S3.getSignedUrl(s3Params), {
+			assert.rejects(S3.getSignedUrl('getObject', s3Params), {
 				name: 'Error',
 				message
 			});
@@ -279,9 +279,9 @@ describe('S3', () => {
 
 			sinon.stub(s3Wrapper, 'getSignedUrlPromise').returns(Promise.resolve(url));
 
-			await S3.getSignedUrl(s3Params);
+			await S3.getSignedUrl('getObject', s3Params);
 
-			sinon.assert.calledWithExactly(s3Wrapper.getSignedUrlPromise, s3Params);
+			sinon.assert.calledWithExactly(s3Wrapper.getSignedUrlPromise, 'getObject', s3Params);
 		});
 	});
 
