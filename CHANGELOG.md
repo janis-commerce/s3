@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.1] - 2019-12-16
+### Fixed
+- `createPresignedPost` method now passes all the params received
+
 ## [1.2.0] - 2019-12-11
 ### Added
 - Added `headObject` method
