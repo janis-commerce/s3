@@ -13,6 +13,7 @@ class GetOgetObjectTestClass extends S3GetObjectStream {
 			[
 				() => {
 					const parser = new Transform({ objectMode: true });
+					// eslint-disable-next-line no-underscore-dangle
 					parser._transform = function(chunk, encoding, cb) {
 						cb(null, chunk);
 					};
