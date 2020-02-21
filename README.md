@@ -44,3 +44,64 @@ try {
 	handleError(err);
 }
 ```
+
+## Streams
+
+For manage stream the package provide
+
+### GetObjectStream
+
+The class to get, parse and process S3 streams.
+
+#### Usage
+```js
+const { GetObjectStream } = require('@janiscommerce/s3');
+
+class MyGetObjectStream extends GetObjectStream {
+
+	// Parse the incoming data before process rows
+	static get parsers() {
+		return [
+			/*
+			* Your parsers here as array, where:
+			* [function, ...params]
+			*/
+		]
+	}
+
+	// Manage the buffer rows size
+	static get bufferSize() {
+		return 10;
+	}
+
+	// Process the buffered rows and return and array to continue.
+	static async processBuffer(buffer) {
+		// ... Your logic here ...
+	}
+
+}
+
+const myProcessedStream = MyGetObjectStream.call({
+	Bucket: 'bucket-ame',
+	Key: `path/to/file.txt`
+});
+```
+
+### uploadStream
+
+Method to manage streams upload
+
+#### Usage
+```js
+const { uploadStream } = require('@janiscommerce/s3');
+
+try {
+	const response = await uploadStream(someStream, {
+		Bucket: 'bucket-ame',
+		Key: `path/to/file.txt`
+	});
+} catch(e) {
+	console.log(e)
+}
+```
+
