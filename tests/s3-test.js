@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const sinon = require('sinon');
+const stream = require('stream');
 
 const s3Wrapper = require('../lib/s3Wrapper');
 
@@ -377,4 +378,47 @@ describe('S3', () => {
 			assert.deepStrictEqual(s3Wrapper.createPresignedPost.getCall(0).args[0], s3Params);
 		});
 	});
+
+	context('S3 Upload', () => {
+
+		it('Should throw an error when s3 upload return an error', async () => {
+			const message = 'Cannot found any bucket with the provided key';
+
+			sinon.stub(s3Wrapper, 'upload').returns();
+
+			s3Wrapper.upload.callsFake((params, options, callback) => {
+				callback(new Error(message), null);
+			});
+
+			const testStream = new stream.PassThrough();
+
+			assert.rejects(S3.uploadStream(testStream, s3Params), {
+				name: 'Error',
+				message
+			});
+		});
+
+		it('Should return the uploaded object info', async () => {
+			const response = {
+				ETag: '"a30c37a2ccde6cf699f557353762815b"',
+				Location: 'https://test.s3.amazonaws.com/test.csv',
+				key: 'test.csv',
+				Key: 'test.csv',
+				Bucket: 'test'
+			};
+
+			sinon.stub(s3Wrapper, 'upload').returns();
+
+			s3Wrapper.upload.callsFake((params, options, callback) => {
+				callback(null, response);
+			});
+
+			const testStream = new stream.PassThrough();
+
+			assert.deepStrictEqual(await S3.uploadStream(testStream, s3Params), response);
+		});
+
+
+	});
+
 });
