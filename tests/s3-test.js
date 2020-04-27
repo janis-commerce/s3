@@ -118,6 +118,39 @@ describe('S3', () => {
 		});
 	});
 
+	context('deleteObjects', () => {
+
+		it('Should return a the same response when calling to deleteObjects method', async () => {
+
+			sinon.stub(s3Wrapper, 'deleteObjects').returns({ promise: () => Promise.resolve(s3Params) });
+
+			const deleteObjectsInstance = await S3.deleteObjects(s3Params);
+
+			assert.deepStrictEqual(deleteObjectsInstance, s3Params);
+		});
+
+		it('Should rejects the promise calling to deleteObjects method', async () => {
+
+			const message = 'random message error';
+
+			sinon.stub(s3Wrapper, 'deleteObjects').returns({ promise: () => Promise.reject(new Error(message)) });
+
+			assert.rejects(S3.deleteObjects(s3Params), {
+				name: 'Error',
+				message
+			});
+		});
+
+		it('Should call with the same params to deleteObjects method', async () => {
+
+			sinon.stub(s3Wrapper, 'deleteObjects').returns({ promise: () => Promise.resolve(s3Params) });
+
+			await S3.deleteObjects(s3Params);
+
+			sinon.assert.calledWithExactly(s3Wrapper.deleteObjects, s3Params);
+		});
+	});
+
 	context('listObjects', () => {
 
 		it('Should return a the same response when calling to listObjects method', async () => {

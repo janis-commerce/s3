@@ -20,6 +20,7 @@ The possible methods are:
 * `putObject`
 * `headObject`
 * `deleteObject`
+* `deleteObjects`
 * `listObjects`
 * `listBuckets`
 * `createBucket`
