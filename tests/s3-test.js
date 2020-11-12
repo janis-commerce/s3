@@ -3,9 +3,13 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
+const { PassThrough, Readable } = require('stream');
+
 const s3Wrapper = require('../lib/s3Wrapper');
 
 const S3 = require('../lib/s3');
+const GetObjectStream = require('../lib/getObjectStream');
+const { GetOgetObjectTestClass, processedRows } = require('./getObjectTestClass');
 
 describe('S3', () => {
 
@@ -410,4 +414,88 @@ describe('S3', () => {
 			assert.deepStrictEqual(s3Wrapper.createPresignedPost.getCall(0).args[0], s3Params);
 		});
 	});
+
+	context('uploadStream', () => {
+
+		it('Should throw an error when s3 upload return an error', async () => {
+			const message = 'Cannot found any bucket with the provided key';
+
+			sinon.stub(s3Wrapper, 'upload').returns();
+
+			s3Wrapper.upload.callsFake((params, options, callback) => {
+				callback(new Error(message), null);
+			});
+
+			const testStream = new PassThrough();
+
+			assert.rejects(S3.uploadStream(testStream, s3Params), {
+				name: 'Error',
+				message
+			});
+		});
+
+		it('Should return the uploaded object info', async () => {
+			const response = {
+				ETag: '"a30c37a2ccde6cf699f557353762815b"',
+				Location: 'https://test.s3.amazonaws.com/test.csv',
+				key: 'test.csv',
+				Key: 'test.csv',
+				Bucket: 'test'
+			};
+
+			sinon.stub(s3Wrapper, 'upload').returns();
+
+			s3Wrapper.upload.callsFake((params, options, callback) => {
+				callback(null, response);
+			});
+
+			const testStream = new PassThrough();
+
+			assert.deepStrictEqual(await S3.uploadStream(testStream, s3Params), response);
+		});
+
+
+	});
+
+	context('GetObjectStream', () => {
+
+		it('Should return instance of class get object stream', () => {
+			const testProto = new S3.GetObjectStream();
+			assert.ok(GetObjectStream.prototype.isPrototypeOf(testProto));
+		});
+
+		it('Should process stream chunks and returned', async () => {
+
+			const streamRows = [{ test01: 'test' }, { test02: 'test' }];
+			const testStream = Readable.from(streamRows);
+
+			sinon.stub(s3Wrapper, 'getObject').returns({ createReadStream: () => testStream });
+
+			const streamResult = await S3.GetObjectStream.call(s3Params);
+
+			const streamData = [];
+			for await (const chunk of streamResult)
+				streamData.push(JSON.parse(chunk.toString()));
+
+			assert.deepStrictEqual(streamData, streamRows);
+		});
+
+		it('Should process stream chunks with defined parser, process buffer and buffer size', async () => {
+
+			const streamRows = ['test-row-1', 'test-row-2'];
+			const testStream = Readable.from(streamRows);
+
+			sinon.stub(s3Wrapper, 'getObject').returns({ createReadStream: () => testStream });
+
+			const streamResult = await GetOgetObjectTestClass.call(s3Params);
+
+			const streamData = [];
+			for await (const chunk of streamResult)
+				streamData.push(chunk.toString());
+
+			assert.deepStrictEqual(streamData, processedRows);
+		});
+
+	});
+
 });
