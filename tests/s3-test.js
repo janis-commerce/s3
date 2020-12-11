@@ -9,7 +9,7 @@ const s3Wrapper = require('../lib/s3Wrapper');
 
 const S3 = require('../lib/s3');
 const GetObjectStream = require('../lib/getObjectStream');
-const { GetOgetObjectTestClass, processedRows } = require('./getObjectTestClass');
+const MyGetObjectStream = require('./getObjectTestClass');
 
 describe('S3', () => {
 
@@ -471,7 +471,9 @@ describe('S3', () => {
 
 			sinon.stub(s3Wrapper, 'getObject').returns({ createReadStream: () => testStream });
 
-			const streamResult = await S3.GetObjectStream.call(s3Params);
+			const getObjectStream = new S3.GetObjectStream();
+
+			const streamResult = await getObjectStream.call(s3Params);
 
 			const streamData = [];
 			for await (const chunk of streamResult)
@@ -487,13 +489,15 @@ describe('S3', () => {
 
 			sinon.stub(s3Wrapper, 'getObject').returns({ createReadStream: () => testStream });
 
-			const streamResult = await GetOgetObjectTestClass.call(s3Params);
+			const myGetObjectStream = new MyGetObjectStream();
+
+			const streamResult = await myGetObjectStream.call(s3Params);
 
 			const streamData = [];
 			for await (const chunk of streamResult)
 				streamData.push(chunk.toString());
 
-			assert.deepStrictEqual(streamData, processedRows);
+			assert.deepStrictEqual(streamData, streamRows.map(row => `${row}-processed`));
 		});
 
 	});

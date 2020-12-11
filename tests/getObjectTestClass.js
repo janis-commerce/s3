@@ -2,13 +2,11 @@
 
 const { Transform } = require('stream');
 
-const parsedRows = ['test-row-1', 'test-row-2'];
-
 const S3GetObjectStream = require('../lib/getObjectStream');
 
-class GetOgetObjectTestClass extends S3GetObjectStream {
+module.exports = class MyGetObjectStream extends S3GetObjectStream {
 
-	static get parsers() {
+	get parsers() {
 		return [
 			[
 				() => {
@@ -23,17 +21,12 @@ class GetOgetObjectTestClass extends S3GetObjectStream {
 		];
 	}
 
-	static get bufferSize() {
+	get bufferSize() {
 		return 1;
 	}
 
-	static async processBuffer(buffer) {
+	async processBuffer(buffer) {
 		return buffer.map(value => `${value}-processed`);
 	}
 
-}
-
-module.exports = {
-	GetOgetObjectTestClass,
-	processedRows: parsedRows.map(row => `${row}-processed`)
 };
