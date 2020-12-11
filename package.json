@@ -1,6 +1,6 @@
 {
   "name": "@janiscommerce/s3",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A package to handle the AWS S3 requests",
   "main": "lib/s3.js",
   "scripts": {
@@ -18,13 +18,13 @@
   "license": "ISC",
   "homepage": "https://github.com/janis-commerce/s3.git#readme",
   "devDependencies": {
-    "husky": "^4.3.0",
-    "eslint": "^7.8.1",
+    "husky": "^4.3.5",
+    "eslint": "^7.15.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.22.0",
-    "mocha": "^8.1.3",
+    "mocha": "^8.2.1",
     "nyc": "^15.1.0",
-    "sinon": "^9.0.3"
+    "sinon": "^9.2.2"
   },
   "files": [
     "lib/"
@@ -33,6 +33,6 @@
     "test": "tests"
   },
   "dependencies": {
-    "aws-sdk": "^2.790.0"
+    "aws-sdk": "^2.808.0"
   }
 }
