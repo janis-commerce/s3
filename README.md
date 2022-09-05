@@ -20,6 +20,7 @@ The possible methods are:
 * `getObject`
 * `putObject`
 * `headObject`
+* `copyObject`
 * `deleteObject`
 * `deleteObjects`
 * `listObjects`

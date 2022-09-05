@@ -6,9 +6,10 @@
   "scripts": {
     "test": "export TEST_ENV=true; mocha --exit -R nyan --recursive tests/",
     "watch-test": "export TEST_ENV=true; mocha --exit -R nyan -w --recursive tests/",
-    "test-ci": "nyc --reporter=lcov --reporter=text-summary mocha --exit --recursive tests/",
+    "test-ci": "export TEST_ENV=true; nyc --reporter=lcov --reporter=text-summary mocha --exit --recursive tests/",
     "coverage": "nyc npm test",
-    "lint": "eslint lib/ tests/"
+    "lint": "eslint lib/ tests/",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -18,13 +19,13 @@
   "license": "ISC",
   "homepage": "https://github.com/janis-commerce/s3.git#readme",
   "devDependencies": {
-    "husky": "^4.3.5",
-    "eslint": "^7.15.0",
+    "husky": "^8.0.1",
+    "eslint": "^8.23.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.22.0",
-    "mocha": "^8.2.1",
+    "mocha": "^8.4.0",
     "nyc": "^15.1.0",
-    "sinon": "^9.2.2"
+    "sinon": "^14.0.0"
   },
   "files": [
     "lib/"
@@ -33,6 +34,6 @@
     "test": "tests"
   },
   "dependencies": {
-    "aws-sdk": "^2.808.0"
+    "aws-sdk": "^2.1209.0"
   }
 }

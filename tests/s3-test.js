@@ -333,7 +333,6 @@ describe('S3', () => {
 			Metadata: {}
 		};
 
-
 		it('Should return a the same response when calling to headObject method', async () => {
 
 			sinon.stub(s3Wrapper, 'headObject').returns({ promise: () => Promise.resolve(response) });
@@ -363,6 +362,45 @@ describe('S3', () => {
 
 			sinon.assert.calledWithExactly(s3Wrapper.headObject, s3Params);
 		});
+	});
+
+	context('copyObject', () => {
+
+		const response = {
+			LastModified: '2019-11-27T18:50:40.000Z',
+			ETag: '"e77f5136cc15419e4c81beba285d4bde"'
+		};
+
+		it('Should return a the same response when calling to copyObject method', async () => {
+
+			sinon.stub(s3Wrapper, 'copyObject').returns({ promise: () => Promise.resolve(response) });
+
+			const copyObjectResponse = await S3.copyObject(s3Params);
+
+			assert.deepStrictEqual(copyObjectResponse, response);
+		});
+
+		it('Should rejects the promise calling to copyObject method', async () => {
+
+			const message = 'random message error';
+
+			sinon.stub(s3Wrapper, 'copyObject').returns({ promise: () => Promise.reject(new Error(message)) });
+
+			assert.rejects(S3.copyObject(s3Params), {
+				name: 'Error',
+				message
+			});
+		});
+
+		it('Should call with the same params to copyObject method', async () => {
+
+			sinon.stub(s3Wrapper, 'copyObject').returns({ promise: () => Promise.resolve(response) });
+
+			await S3.copyObject(s3Params);
+
+			sinon.assert.calledWithExactly(s3Wrapper.copyObject, s3Params);
+		});
+
 	});
 
 	context('createPresignedPost', () => {
