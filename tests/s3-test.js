@@ -473,6 +473,7 @@ describe('S3', () => {
 		});
 
 		it('Should return the uploaded object info', async () => {
+
 			const response = {
 				ETag: '"a30c37a2ccde6cf699f557353762815b"',
 				Location: 'https://test.s3.amazonaws.com/test.csv',
@@ -491,7 +492,6 @@ describe('S3', () => {
 
 			assert.deepStrictEqual(await S3.uploadStream(testStream, s3Params), response);
 		});
-
 
 	});
 
