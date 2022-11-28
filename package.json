@@ -19,13 +19,13 @@
   "license": "ISC",
   "homepage": "https://github.com/janis-commerce/s3.git#readme",
   "devDependencies": {
-    "husky": "^8.0.1",
-    "eslint": "^8.23.0",
+    "eslint": "^8.28.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.22.0",
-    "mocha": "^8.4.0",
+    "husky": "^8.0.2",
+    "mocha": "^10.1.0",
     "nyc": "^15.1.0",
-    "sinon": "^14.0.0"
+    "sinon": "^14.0.2"
   },
   "files": [
     "lib/"
