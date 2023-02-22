@@ -308,9 +308,9 @@ describe('S3', () => {
 	// 		Metadata: {}
 	// 	};
 
-	// 	it('Should return a the same response when calling to headObject method', async () => {
+	// 	it.only('Should return a the same response when calling to headObject method', async () => {
 
-	// 		sinon.stub(S3Client, 'send').resolves(s3Params);
+	// 		sinon.stub(S3Client, 'send').resolves(response);
 	// 		// this.s3ClientMock.on(HeadObjectCommand).resolves(s3Params);
 
 	// 		const headObjectResponse = await S3.headObject(s3Params);
@@ -328,12 +328,12 @@ describe('S3', () => {
 	// 		});
 	// 	});
 
-	// 	// it('Should call with the same params to headObject method', async () => {
+	// 	it('Should call with the same params to headObject method', async () => {
 
-	// 	// 	await S3.headObject(s3Params);
+	// 		await S3.headObject(s3Params);
 
-	// 	// 	sinon.assert.calledWithExactly(s3Wrapper.headObject, s3Params);
-	// 	// });
+	// 		sinon.assert.calledWithExactly(s3Wrapper.headObject, s3Params);
+	// 	});
 	// });
 
 	// context('copyObject', () => {
@@ -521,6 +521,24 @@ describe('S3', () => {
 	// 		const testStream = Readable.from(streamRows);
 
 	// 		sinon.stub(S3Client, 'send').returns({ createReadStream: () => testStream });
+
+	// 		const getObjectStream = new S3.GetObjectStream();
+
+	// 		const streamResult = await getObjectStream.call(s3Params);
+
+	// 		const streamData = [];
+	// 		for await (const chunk of streamResult)
+	// 			streamData.push(JSON.parse(chunk.toString()));
+
+	// 		assert.deepStrictEqual(streamData, streamRows);
+	// 	});
+
+	// 	it('Should process stream chunks and returned', async () => {
+
+	// 		const streamRows = [{ test01: 'test' }, { test02: 'test' }];
+	// 		const testStream = Readable.from(streamRows);
+
+	// 		sinon.stub(S3Client, 'getObject').returns({ createReadStream: () => testStream });
 
 	// 		const getObjectStream = new S3.GetObjectStream();
 
