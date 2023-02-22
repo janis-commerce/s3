@@ -1,11 +1,12 @@
 'use strict';
 
 const assert = require('assert');
-const sinon = require('sinon');
+// const sinon = require('sinon');
 
 // const { PassThrough, Readable } = require('stream');
 
 const { mockClient } = require('aws-sdk-client-mock');
+// const s3RequestSigner = require('@aws-sdk/s3-request-presigner');
 
 const {
 	S3Client,
@@ -18,6 +19,7 @@ const {
 	CreateBucketCommand,
 	DeleteBucketCommand
 	// HeadObjectCommand,
+	// ...s3Wrapper
 	// CopyObjectCommand
 } = require('../lib/s3Wrapper');
 
@@ -31,18 +33,12 @@ describe('S3', () => {
 
 	beforeEach(() => {
 		this.s3ClientMock = mockClient(S3Client);
-		// const mock = mockClient(S3Client);
-		// sinon.stub(SESClient.prototype, 'send');
-		// S3Client.onAnyCommand(s3Params).resolves({});
-		// sinon.stub(S3Client, 'send');
 		process.env.IS_OFFLINE = true;
 		process.env.S3_LOCAL_ENDPOINT = 'janis.localhost';
 	});
 
 	afterEach(() => {
-		this.s3ClientMock.reset();
 		this.s3ClientMock.restore();
-		sinon.restore();
 		delete process.env.IS_OFFLINE;
 		delete process.env.S3_LOCAL_ENDPOINT;
 	});
@@ -66,7 +62,6 @@ describe('S3', () => {
 
 		it('Should rejects the promise calling to getObject method', async () => {
 
-
 			this.s3ClientMock.on(GetObjectCommand).resolves(new Error(message));
 
 			assert.rejects(S3.getObject(s3Params), {
@@ -75,14 +70,14 @@ describe('S3', () => {
 			});
 		});
 
-		// it('Should call with the same params to getObject method', async () => {
+		it('Should call with the same params to getObject method', async () => {
 
-		// 	// this.s3ClientMock.on(GetObjectCommand).resolves(s3Params);
+			this.s3ClientMock.on(GetObjectCommand).resolves(s3Params);
 
-		// 	await S3.getObject(s3Params);
-		// // 	// console.log(s3ClientMock.call(0).args[0].input);
-		// // 	sinon.assert.calledWithExactly(await S3.getObject(s3Params), s3Params);
-		// });
+			await S3.getObject(s3Params);
+
+			this.s3ClientMock.commandCalls(GetObjectCommand, s3Params);
+		});
 	});
 
 	context('putObject', () => {
@@ -106,13 +101,14 @@ describe('S3', () => {
 			});
 		});
 
-		// it.only('Should call with the same params to putObject method', async () => {
-		// 	// this.s3ClientMock.on(PutObjectCommand).resolves(s3Params);
+		it('Should call with the same params to putObject method', async () => {
 
-		// 	await S3.putObject(s3Params);
+			this.s3ClientMock.on(PutObjectCommand).resolves(s3Params);
 
-		// 	sinon.assert.calledWithExactly(S3.putObject, s3Params);
-		// });
+			await S3.putObject(s3Params);
+
+			this.s3ClientMock.commandCalls(PutObjectCommand, s3Params);
+		});
 	});
 
 	context('deleteObject', () => {
@@ -128,7 +124,7 @@ describe('S3', () => {
 
 		it('Should rejects the promise calling to deleteObject method', async () => {
 
-			this.s3ClientMock.on(PutObjectCommand).resolves(new Error(message));
+			this.s3ClientMock.on(DeleteObjectCommand).resolves(new Error(message));
 
 			assert.rejects(S3.deleteObject(s3Params), {
 				name: 'Error',
@@ -136,12 +132,14 @@ describe('S3', () => {
 			});
 		});
 
-		// it('Should call with the same params to deleteObject method', async () => {
+		it('Should call with the same params to deleteObject method', async () => {
 
-		// 	await S3.deleteObject(s3Params);
+			this.s3ClientMock.on(DeleteObjectCommand).resolves(s3Params);
 
-		// 	sinon.assert.calledWithExactly(s3Wrapper.deleteObject, s3Params);
-		// });
+			await S3.deleteObject(s3Params);
+
+			this.s3ClientMock.commandCalls(DeleteObjectCommand, s3Params);
+		});
 	});
 
 	context('deleteObjects', () => {
@@ -157,7 +155,7 @@ describe('S3', () => {
 
 		it('Should rejects the promise calling to deleteObjects method', async () => {
 
-			this.s3ClientMock.on(PutObjectCommand).resolves(new Error(message));
+			this.s3ClientMock.on(DeleteObjectsCommand).resolves(new Error(message));
 
 			assert.rejects(S3.deleteObjects(s3Params), {
 				name: 'Error',
@@ -165,12 +163,14 @@ describe('S3', () => {
 			});
 		});
 
-		// it('Should call with the same params to deleteObjects method', async () => {
+		it('Should call with the same params to deleteObjects method', async () => {
 
-		// 	await S3.deleteObjects(s3Params);
+			this.s3ClientMock.on(DeleteObjectCommand).resolves(s3Params);
 
-		// 	sinon.assert.calledWithExactly(s3Wrapper.deleteObjects, s3Params);
-		// });
+			await S3.deleteObjects(s3Params);
+
+			this.s3ClientMock.commandCalls(DeleteObjectCommand, s3Params);
+		});
 	});
 
 	context('listObjects', () => {
@@ -186,8 +186,7 @@ describe('S3', () => {
 
 		it('Should rejects the promise calling to listObjects method', async () => {
 
-
-			this.s3ClientMock.on(PutObjectCommand).resolves(new Error(message));
+			this.s3ClientMock.on(ListObjectsCommand).resolves(new Error(message));
 
 			assert.rejects(S3.listObjects(s3Params), {
 				name: 'Error',
@@ -195,12 +194,14 @@ describe('S3', () => {
 			});
 		});
 
-		// it('Should call with the same params to listObjects method', async () => {
+		it('Should call with the same params to listObjects method', async () => {
 
-		// 	await S3.listObjects(s3Params);
+			this.s3ClientMock.on(ListObjectsCommand).resolves(s3Params);
 
-		// 	sinon.assert.calledWithExactly(s3Wrapper.listObjects, s3Params);
-		// });
+			await S3.listObjects(s3Params);
+
+			this.s3ClientMock.commandCalls(ListObjectsCommand, s3Params);
+		});
 	});
 
 	context('listBuckets', () => {
@@ -216,7 +217,7 @@ describe('S3', () => {
 
 		it('Should rejects the promise calling to listBuckets method', async () => {
 
-			this.s3ClientMock.on(PutObjectCommand).resolves(new Error(message));
+			this.s3ClientMock.on(ListBucketsCommand).resolves(new Error(message));
 
 			assert.rejects(S3.listBuckets(s3Params), {
 				name: 'Error',
@@ -224,12 +225,14 @@ describe('S3', () => {
 			});
 		});
 
-		// it('Should call with the same params to listBuckets method', async () => {
+		it('Should call with the same params to listBuckets method', async () => {
 
-		// 	await S3.listBuckets(s3Params);
+			this.s3ClientMock.on(ListBucketsCommand).resolves(s3Params);
 
-		// 	sinon.assert.calledWithExactly(s3Wrapper.listBuckets, s3Params);
-		// });
+			await S3.listBuckets(s3Params);
+
+			this.s3ClientMock.commandCalls(ListBucketsCommand, s3Params);
+		});
 	});
 
 	context('createBucket', () => {
@@ -245,7 +248,7 @@ describe('S3', () => {
 
 		it('Should rejects the promise calling to createBucket method', async () => {
 
-			this.s3ClientMock.on(PutObjectCommand).resolves(new Error(message));
+			this.s3ClientMock.on(CreateBucketCommand).resolves(new Error(message));
 
 			assert.rejects(S3.createBucket(s3Params), {
 				name: 'Error',
@@ -253,12 +256,14 @@ describe('S3', () => {
 			});
 		});
 
-		// it('Should call with the same params to createBucket method', async () => {
+		it('Should call with the same params to createBucket method', async () => {
 
-		// 	await S3.createBucket(s3Params);
+			this.s3ClientMock.on(CreateBucketCommand).resolves(s3Params);
 
-		// 	sinon.assert.calledWithExactly(s3Wrapper.createBucket, s3Params);
-		// });
+			await S3.createBucket(s3Params);
+
+			this.s3ClientMock.commandCalls(CreateBucketCommand, s3Params);
+		});
 	});
 
 	context('deleteBucket', () => {
@@ -274,7 +279,7 @@ describe('S3', () => {
 
 		it('Should rejects the promise calling to deleteBucket method', async () => {
 
-			this.s3ClientMock.on(PutObjectCommand).resolves(new Error(message));
+			this.s3ClientMock.on(DeleteBucketCommand).resolves(new Error(message));
 
 			assert.rejects(S3.deleteBucket(s3Params), {
 				name: 'Error',
@@ -282,15 +287,17 @@ describe('S3', () => {
 			});
 		});
 
-		// it('Should call with the same params to deleteBucket method', async () => {
+		it('Should call with the same params to deleteBucket method', async () => {
 
-		// 	await S3.deleteBucket(s3Params);
+			this.s3ClientMock.on(DeleteBucketCommand).resolves(s3Params);
 
-		// 	sinon.assert.calledWithExactly(s3Wrapper.deleteBucket, s3Params);
-		// });
+			await S3.deleteBucket(s3Params);
+
+			this.s3ClientMock.commandCalls(DeleteBucketCommand, s3Params);
+		});
 	});
 
-	// context.only('headObject', () => {
+	// context('headObject', () => {
 
 	// 	const response = {
 	// 		AcceptRanges: 'bytes',
@@ -303,7 +310,8 @@ describe('S3', () => {
 
 	// 	it('Should return a the same response when calling to headObject method', async () => {
 
-	// 		this.s3ClientMock.on(HeadObjectCommand).resolves(s3Params);
+	// 		sinon.stub(S3Client, 'send').resolves(s3Params);
+	// 		// this.s3ClientMock.on(HeadObjectCommand).resolves(s3Params);
 
 	// 		const headObjectResponse = await S3.headObject(s3Params);
 
@@ -370,10 +378,9 @@ describe('S3', () => {
 
 	// 	it('Should return a the same response when calling to getSignedUrl method', async () => {
 
-	// 		process.env.IS_OFFLINE = true;
-	// 		process.env.S3_LOCAL_ENDPOINT = 'janis.localhost';
+	// 		// this.s3ClientMock.on(GetObjectCommand).resolves(url);
 
-	// 		sinon.stub(s3Wrapper, 'getSignedUrl').returns(url);
+	// 		sinon.stub(s3RequestSigner, 'getSignedUrl').returns(url);
 
 	// 		const presignedUrl = await S3.getSignedUrl(s3Params);
 
@@ -389,7 +396,6 @@ describe('S3', () => {
 	// 			message
 	// 		});
 	// 	});
-	// });
 
 	// 	it('Should call with the same params to getSignedUrlPromise method', async () => {
 
@@ -462,19 +468,20 @@ describe('S3', () => {
 	// context('uploadStream', () => {
 
 	// 	it('Should throw an error when s3 upload return an error', async () => {
-	// 		const message = 'Cannot found any bucket with the provided key';
+
+	// 		const errorMessage = 'Cannot found any bucket with the provided key';
 
 	// 		sinon.stub(S3Client, 'send').returns();
 
 	// 		s3Wrapper.upload.callsFake((params, options, callback) => {
-	// 			callback(new Error(message), null);
+	// 			callback(new Error(errorMessage), null);
 	// 		});
 
 	// 		const testStream = new PassThrough();
 
 	// 		assert.rejects(S3.uploadStream(testStream, s3Params), {
 	// 			name: 'Error',
-	// 			message
+	// 			errorMessage
 	// 		});
 	// 	});
 
