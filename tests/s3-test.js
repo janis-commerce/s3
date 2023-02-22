@@ -1,12 +1,14 @@
 'use strict';
 
 const assert = require('assert');
-// const sinon = require('sinon');
+const sinon = require('sinon');
 
 // const { PassThrough, Readable } = require('stream');
 
 const { mockClient } = require('aws-sdk-client-mock');
 // const s3RequestSigner = require('@aws-sdk/s3-request-presigner');
+
+const s3Wrapper = require('../lib/s3Wrapper');
 
 const {
 	S3Client,
@@ -17,19 +19,23 @@ const {
 	ListObjectsCommand,
 	ListBucketsCommand,
 	CreateBucketCommand,
-	DeleteBucketCommand
-	// HeadObjectCommand,
-	// ...s3Wrapper
+	DeleteBucketCommand,
+	HeadObjectCommand
 	// CopyObjectCommand
-} = require('../lib/s3Wrapper');
+} = s3Wrapper;
 
 const S3 = require('../lib/s3');
 // const GetObjectStream = require('../lib/getObjectStream');
 // const MyGetObjectStream = require('./getObjectTestClass');
+const s3Params = {
+	Body: '<Binary String>',
+	Bucket: 'examplebucket',
+	Key: 'objectkey'
+};
+
+const message = 'random message error';
 
 describe('S3', () => {
-
-	const message = 'random message error';
 
 	beforeEach(() => {
 		this.s3ClientMock = mockClient(S3Client);
@@ -42,12 +48,6 @@ describe('S3', () => {
 		delete process.env.IS_OFFLINE;
 		delete process.env.S3_LOCAL_ENDPOINT;
 	});
-
-	const s3Params = {
-		Body: '<Binary String>',
-		Bucket: 'examplebucket',
-		Key: 'objectkey'
-	};
 
 	context('getObject', () => {
 
@@ -297,44 +297,36 @@ describe('S3', () => {
 		});
 	});
 
-	// context('headObject', () => {
+	context('headObject', () => {
 
-	// 	const response = {
-	// 		AcceptRanges: 'bytes',
-	// 		LastModified: '2019-11-27T18:50:40.000Z',
-	// 		ContentLength: 56782,
-	// 		ETag: '"e77f5136cc15419e4c81beba285d4bde"',
-	// 		ContentType: 'image/jpeg',
-	// 		Metadata: {}
-	// 	};
+		const response = {
+			AcceptRanges: 'bytes',
+			LastModified: '2019-11-27T18:50:40.000Z',
+			ContentLength: 56782,
+			ETag: '"e77f5136cc15419e4c81beba285d4bde"',
+			ContentType: 'image/jpeg',
+			Metadata: {}
+		};
 
-	// 	it('Should return a the same response when calling to headObject method', async () => {
+		it('Should return a the same response when calling to headObject method', async () => {
 
-	// 		sinon.stub(S3Client, 'send').resolves(s3Params);
-	// 		// this.s3ClientMock.on(HeadObjectCommand).resolves(s3Params);
+			this.s3ClientMock.on(HeadObjectCommand).resolves(response);
 
-	// 		const headObjectResponse = await S3.headObject(s3Params);
+			const headObjectResponse = await S3.headObject(s3Params);
 
-	// 		assert.deepStrictEqual(headObjectResponse, response);
-	// 	});
+			assert.deepStrictEqual(headObjectResponse, response);
+		});
 
-	// 	it('Should rejects the promise calling to headObject method', async () => {
+		it('Should rejects the promise calling to headObject method', async () => {
 
-	// 		this.s3ClientMock.on(HeadObjectCommand).resolves(new Error(message));
+			this.s3ClientMock.on(HeadObjectCommand).resolves(new Error(message));
 
-	// 		assert.rejects(S3.headObject(s3Params), {
-	// 			name: 'Error',
-	// 			message
-	// 		});
-	// 	});
-
-	// 	// it('Should call with the same params to headObject method', async () => {
-
-	// 	// 	await S3.headObject(s3Params);
-
-	// 	// 	sinon.assert.calledWithExactly(s3Wrapper.headObject, s3Params);
-	// 	// });
-	// });
+			assert.rejects(S3.headObject(s3Params), {
+				name: 'Error',
+				message
+			});
+		});
+	});
 
 	// context('copyObject', () => {
 
@@ -370,41 +362,6 @@ describe('S3', () => {
 	// 		// sinon.assert.calledWithExactly(s3Wrapper.copyObject, s3Params);
 	// 	// });
 
-	// });
-
-	// context('getSignedUrl', () => {
-
-	// 	const url = 'https://bucket-name.s3.us-east-1.amazonaws.com/path/to/file.txt';
-
-	// 	it('Should return a the same response when calling to getSignedUrl method', async () => {
-
-	// 		// this.s3ClientMock.on(GetObjectCommand).resolves(url);
-
-	// 		sinon.stub(s3RequestSigner, 'getSignedUrl').returns(url);
-
-	// 		const presignedUrl = await S3.getSignedUrl(s3Params);
-
-	// 		assert.deepStrictEqual(presignedUrl, url);
-	// 	});
-
-	// 	it('Should rejects the promise calling to getSignedUrl method', async () => {
-
-	// 		sinon.stub(S3Client, 'send').returns(Promise.reject(new Error(message)));
-
-	// 		assert.rejects(S3.getSignedUrl('getObject', s3Params), {
-	// 			name: 'Error',
-	// 			message
-	// 		});
-	// 	});
-
-	// 	it('Should call with the same params to getSignedUrlPromise method', async () => {
-
-	// 		sinon.stub(S3Client, 'send').returns(url);
-
-	// 		await S3.getSignedUrl('getObject', s3Params);
-
-	// 		sinon.assert.calledWithExactly(s3Wrapper.getSignedUrlPromise, 'getObject', s3Params);
-	// 	});
 	// });
 
 	// context('createPresignedPost', () => {
@@ -553,4 +510,39 @@ describe('S3', () => {
 
 	// });
 
+});
+
+describe('getSignedUrl', () => {
+
+	afterEach(() => sinon.restore());
+
+	const url = 'https://bucket-name.s3.us-east-1.amazonaws.com/path/to/file.txt';
+
+	it('Should return a the same response when calling to getSignedUrl method', async () => {
+
+		sinon.stub(s3Wrapper, 'getSignedUrl').returns(url);
+
+		const presignedUrl = await S3.getSignedUrl(s3Params);
+
+		assert.deepStrictEqual(presignedUrl, url);
+	});
+
+	it('Should rejects the promise calling to getSignedUrl method', async () => {
+
+		sinon.stub(s3Wrapper, 'getSignedUrl').rejects(new Error(message));
+
+		await assert.rejects(S3.getSignedUrl('getObject', s3Params), {
+			name: 'Error',
+			message
+		});
+	});
+
+	it('Should call with the same params to getSignedUrlPromise method', async () => {
+
+		sinon.stub(s3Wrapper, 'getSignedUrl').returns(url);
+
+		await S3.getSignedUrl(s3Params);
+
+		// sinon.assert.calledWithExactly(s3Wrapper.getSignedUrl, S3Client, new GetObjectCommand(s3Params), {});
+	});
 });
