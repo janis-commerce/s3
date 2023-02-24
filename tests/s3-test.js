@@ -499,7 +499,11 @@ context('GetObjectStream', () => {
 	afterEach(() => this.s3ClientMock.reset());
 
 	it.skip('Should return instance of class get object stream', () => {
+
+		this.s3ClientMock.on(GetObjectCommand).resolves();
+
 		const testProto = new S3.GetObjectStream();
+
 		assert.ok(GetObjectStream.prototype.isPrototypeOf(testProto));
 	});
 
@@ -508,7 +512,7 @@ context('GetObjectStream', () => {
 		const streamRows = [{ test01: 'test' }, { test02: 'test' }];
 		const testStream = Readable.from(streamRows);
 
-		this.s3ClientMock.on(GetObjectCommand).resolves({ createReadStream: () => testStream });
+		this.s3ClientMock.on(GetObjectCommand).resolves(testStream);
 
 		const getObjectStream = new S3.GetObjectStream();
 
