@@ -13,7 +13,7 @@ npm install @janiscommerce/s3
 ## Description
 This is a wrapper for the AWS SDK for the management S3 request, that makes easier the use of it.
 
-For more information read the [AWS S3 SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)
+For more information read the [AWS S3 SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/index.html)
 
 The possible methods are:
 
@@ -27,10 +27,8 @@ The possible methods are:
 * `listBuckets`
 * `createBucket`
 * `deleteBucket`
-* `getSignedUrl` (alias of `getSignedUrlPromise`)
+* `getSignedUrl`
 * `createPresignedPost`
-
-All of them receive the same params and are promisified.
 
 ## Usage
 ```js
