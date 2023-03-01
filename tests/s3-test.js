@@ -498,7 +498,7 @@ context('GetObjectStream', () => {
 
 	afterEach(() => this.s3ClientMock.reset());
 
-	it.skip('Should return instance of class get object stream', () => {
+	it('Should return instance of class get object stream', () => {
 
 		this.s3ClientMock.on(GetObjectCommand).resolves();
 
@@ -507,7 +507,7 @@ context('GetObjectStream', () => {
 		assert.ok(GetObjectStream.prototype.isPrototypeOf(testProto));
 	});
 
-	it.skip('Should process stream chunks and returned', async () => {
+	it('Should process stream chunks and returned', async () => {
 
 		const streamRows = [{ test01: 'test' }, { test02: 'test' }];
 		const testStream = Readable.from(streamRows);
@@ -531,8 +531,7 @@ context('GetObjectStream', () => {
 		const streamRows = ['test-row-1', 'test-row-2'];
 		const testStream = Readable.from(streamRows);
 
-		this.s3ClientMock.on(GetObjectCommand).resolves({ createReadStream: () => testStream });
-		// sinon.stub(S3Client, 'send').returns({ createReadStream: () => testStream });
+		this.s3ClientMock.on(GetObjectCommand).resolves(testStream);
 
 		const myGetObjectStream = new MyGetObjectStream();
 
