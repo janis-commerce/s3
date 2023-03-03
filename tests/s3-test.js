@@ -526,7 +526,7 @@ context('GetObjectStream', () => {
 		assert.deepStrictEqual(streamData, streamRows);
 	});
 
-	it.skip('Should process stream chunks with defined parser, process buffer and buffer size', async () => {
+	it('Should process stream chunks with defined parser, process buffer and buffer size', async () => {
 
 		const streamRows = ['test-row-1', 'test-row-2'];
 		const testStream = Readable.from(streamRows);
