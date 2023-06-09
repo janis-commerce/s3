@@ -28,6 +28,7 @@ module.exports = {
 	},
 
 	rules: {
+		strict: ['error', 'global'],
 		'operator-linebreak': 0,
 		'no-continue': 0,
 		'no-plusplus': 0,
@@ -38,7 +39,7 @@ module.exports = {
 		'prefer-template': 0,
 		'import/no-unresolved': 0,
 		'import/no-extraneous-dependencies': ['error', { devDependencies: ['**/tests/**/*.js'] }],
-
+		'import/extensions': 0,
 		'no-bitwise': 0,
 
 		curly: ['error', 'multi-or-nest'],
@@ -118,6 +119,8 @@ module.exports = {
 			ObjectExpression: { minProperties: 5, multiline: true, consistent: true },
 			ObjectPattern: { minProperties: 5, multiline: true, consistent: true }
 		}],
-		'nonblock-statement-body-position': ['error', 'below', { overrides: { else: 'any' } }]
+		'nonblock-statement-body-position': ['error', 'below', { overrides: { else: 'any' } }],
+
+		'default-param-last': 0
 	}
 };

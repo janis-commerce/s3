@@ -27,13 +27,13 @@ const {
 const GetObjectStream = require('../lib/getObjectStream');
 const MyGetObjectStream = require('./getObjectTestClass');
 
+const message = 'random message error';
+
 const s3Params = {
 	Body: '<Binary String>',
 	Bucket: 'examplebucket',
 	Key: 'objectkey'
 };
-
-const message = 'random message error';
 
 describe('S3 methods', () => {
 
@@ -45,20 +45,71 @@ describe('S3 methods', () => {
 
 	context('getObject', () => {
 
-		it('Should return the same response when calling to getObject method', async () => {
+		let s3ParamsForGetObject;
 
-			this.s3ClientMock.on(GetObjectCommand).resolves(s3Params);
+		beforeEach(() => {
+			const bodyReadable = new Readable();
 
-			const getObjectInstance = await S3.getObject(s3Params);
+			bodyReadable.push('<Binary String>');
+			bodyReadable.push(null);
 
-			assert.deepStrictEqual(getObjectInstance, s3Params);
+			s3ParamsForGetObject = {
+				Body: bodyReadable,
+				Bucket: 'examplebucket',
+				Key: 'objectkey'
+			};
+		});
+
+		it('Should return the same response when calling (With Body as Buffer) to getObject method', async () => {
+
+			const bodyReadable = new Readable();
+
+			bodyReadable.push('<Binary String>');
+			bodyReadable.push(null);
+
+			this.s3ClientMock.on(GetObjectCommand).resolves(s3ParamsForGetObject);
+
+			const getObjectInstance = await S3.getObject(s3ParamsForGetObject);
+
+			const bodyBuffered = Buffer.concat(await bodyReadable.toArray());
+
+			assert.deepStrictEqual(getObjectInstance, {
+				...s3ParamsForGetObject,
+				Body: bodyBuffered
+			});
+		});
+
+		it('Should return the same response (with Body as Readable type) when calling to getObjectRaw method', async () => {
+
+			this.s3ClientMock.on(GetObjectCommand).resolves(s3ParamsForGetObject);
+
+			const getObjectInstance = await S3.getObjectRaw(s3ParamsForGetObject);
+
+			assert.deepStrictEqual(getObjectInstance, s3ParamsForGetObject);
+		});
+
+		it('Should return the same response (with Body empty) when calling to getObject method', async () => {
+
+			const s3ParamsBodyEmpty = {
+				...s3ParamsForGetObject,
+				Body: undefined
+			};
+
+			this.s3ClientMock.on(GetObjectCommand).resolves(s3ParamsBodyEmpty);
+
+			const getObjectInstance = await S3.getObject(s3ParamsBodyEmpty);
+
+			assert.deepStrictEqual(getObjectInstance, {
+				...s3ParamsForGetObject,
+				Body: null
+			});
 		});
 
 		it('Should rejects the promise calling to getObject method', async () => {
 
 			this.s3ClientMock.on(GetObjectCommand).resolves(new Error(message));
 
-			assert.rejects(S3.getObject(s3Params), {
+			assert.rejects(S3.getObject(s3ParamsForGetObject), {
 				name: 'Error',
 				message
 			});
@@ -66,11 +117,11 @@ describe('S3 methods', () => {
 
 		it('Should call with the same params to getObject method', async () => {
 
-			this.s3ClientMock.on(GetObjectCommand).resolves(s3Params);
+			this.s3ClientMock.on(GetObjectCommand).resolves(s3ParamsForGetObject);
 
-			await S3.getObject(s3Params);
+			await S3.getObject(s3ParamsForGetObject);
 
-			this.s3ClientMock.commandCalls(GetObjectCommand, s3Params);
+			this.s3ClientMock.commandCalls(GetObjectCommand, s3ParamsForGetObject);
 		});
 	});
 
