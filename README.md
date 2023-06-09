@@ -13,11 +13,14 @@ npm install @janiscommerce/s3
 ## Description
 This is a wrapper for the AWS SDK for the management S3 request, that makes easier the use of it.
 
-For more information read the [AWS S3 SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/index.html)
+For more information read the [AWS S3 SDK](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/index.html).
+
+> Since `v2.0.0` you need Node 18
 
 The possible methods are:
 
 * `getObject`
+* `getObjectRaw`
 * `putObject`
 * `headObject`
 * `copyObject`
@@ -29,6 +32,14 @@ The possible methods are:
 * `deleteBucket`
 * `getSignedUrl`
 * `createPresignedPost`
+
+### getObject
+
+Since the package updates to use SDK v3 and Node-18 compatibility, when use `getObject`, it returns the `Body` as an `Readable` type. This change is not compatible with previous uses.
+
+So `getObject` method convert the `Body` into a `Buffer` type object, to keep the compatibility with previous uses.
+
+> If you wanted the original behavior, you can use `getObjectRaw`.
 
 ## Usage
 ```js
