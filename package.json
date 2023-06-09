@@ -9,7 +9,8 @@
     "test-ci": "export TEST_ENV=true; nyc --reporter=lcov --reporter=text-summary mocha --exit --recursive tests/",
     "coverage": "nyc npm test",
     "lint": "eslint lib/ tests/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postpublish": "./.postpublish.sh"
   },
   "repository": {
     "type": "git",
@@ -19,14 +20,14 @@
   "license": "ISC",
   "homepage": "https://github.com/janis-commerce/s3.git#readme",
   "devDependencies": {
-    "aws-sdk-client-mock": "^2.0.1",
+    "aws-sdk-client-mock": "^2.1.1",
     "eslint": "^8.42.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "sinon": "^15.0.1"
+    "sinon": "^15.1.0"
   },
   "files": [
     "lib/"
@@ -35,9 +36,9 @@
     "test": "tests"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.282.0",
-    "@aws-sdk/lib-storage": "^3.282.0",
-    "@aws-sdk/s3-presigned-post": "^3.282.0",
-    "@aws-sdk/s3-request-presigner": "^3.282.0"
+    "@aws-sdk/client-s3": "^3.350.0",
+    "@aws-sdk/lib-storage": "^3.350.0",
+    "@aws-sdk/s3-presigned-post": "^3.350.0",
+    "@aws-sdk/s3-request-presigner": "^3.350.0"
   }
 }
