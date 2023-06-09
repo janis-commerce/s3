@@ -20,8 +20,8 @@
   "homepage": "https://github.com/janis-commerce/s3.git#readme",
   "devDependencies": {
     "aws-sdk-client-mock": "^2.0.1",
-    "eslint": "^8.35.0",
-    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint": "^8.42.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
