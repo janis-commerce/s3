@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+
+## Unreleased
+### Added
+- `S3.getObjectRaw` if you want the original AWS response for `getObject`, you will receive a Readable object in `Body` property.
+
+### Changed
+- `S3.getObject` method returns a Buffer type in `Body` property.
 ## [2.0.0] - 2023-03-03
 ### Changed
 - Migrate `AWS SDK` to `V3` version
