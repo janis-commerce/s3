@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [2.0.2] - 2023-09-26
+### Fixed
+- `S3.uploadStream` method now handles properly the `Upload` constructor from `lib-storage`.
+
 ## [2.0.1] - 2023-06-09
 ### Added
 - `S3.getObjectRaw` if you want the original AWS response for `getObject`, you will receive a Readable object in `Body` property.
