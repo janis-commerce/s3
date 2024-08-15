@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [2.0.3] - 2024-08-15
+### Fixed
+- Dependencies updated
+
 ## [2.0.2] - 2023-09-26
 ### Fixed
 - `S3.uploadStream` method now handles properly the `Upload` constructor from `lib-storage`.

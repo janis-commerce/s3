@@ -20,7 +20,7 @@
   "license": "ISC",
   "homepage": "https://github.com/janis-commerce/s3.git#readme",
   "devDependencies": {
-    "aws-sdk-client-mock": "^2.1.1",
+    "aws-sdk-client-mock": "^2.2.0",
     "eslint": "^8.42.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
@@ -36,9 +36,9 @@
     "test": "tests"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.350.0",
-    "@aws-sdk/lib-storage": "^3.350.0",
-    "@aws-sdk/s3-presigned-post": "^3.350.0",
-    "@aws-sdk/s3-request-presigner": "^3.350.0"
+    "@aws-sdk/client-s3": "^3.632.0",
+    "@aws-sdk/lib-storage": "^3.632.0",
+    "@aws-sdk/s3-presigned-post": "^3.632.0",
+    "@aws-sdk/s3-request-presigner": "^3.632.0"
   }
 }
