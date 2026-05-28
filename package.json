@@ -6,10 +6,10 @@
   "scripts": {
     "test": "export TEST_ENV=true; mocha --exit -R nyan --recursive tests/",
     "watch-test": "export TEST_ENV=true; mocha --exit -R nyan -w --recursive tests/",
-    "test-ci": "export TEST_ENV=true; nyc --reporter=lcov --reporter=text-summary mocha --exit --recursive tests/",
     "coverage": "nyc npm test",
     "lint": "eslint lib/ tests/",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "coverage-ci": "export TEST_ENV=true; nyc --reporter=lcov --reporter=text-summary mocha --exit --recursive tests/"
   },
   "repository": {
     "type": "git",
@@ -39,5 +39,8 @@
     "@aws-sdk/lib-storage": "^3.632.0",
     "@aws-sdk/s3-presigned-post": "^3.632.0",
     "@aws-sdk/s3-request-presigner": "^3.632.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
