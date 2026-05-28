@@ -40,5 +40,8 @@
     "@aws-sdk/lib-storage": "^3.632.0",
     "@aws-sdk/s3-presigned-post": "^3.632.0",
     "@aws-sdk/s3-request-presigner": "^3.632.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
